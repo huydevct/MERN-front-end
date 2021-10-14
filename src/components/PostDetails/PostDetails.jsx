@@ -10,7 +10,7 @@ import moment from "moment";
 import { useParams, useHistory } from "react-router-dom";
 
 import useStyles from "./styles";
-import { getPost } from '../../actions/posts';
+import { getPost, getPostBySearch } from '../../actions/posts';
 
 const PostDetails = () => {
   const classes = useStyles();
@@ -23,6 +23,12 @@ const PostDetails = () => {
     dispatch(getPost(id));
   },[id]);
 
+  useEffect(() => {
+    if(post) {
+      dispatch(getPostBySearch({ search: 'none', tags: post?.tags.join(',') }))
+    }
+  },[post])
+
   if(!post) return null;
 
   if(isLoading){
@@ -30,6 +36,10 @@ const PostDetails = () => {
           <CircularProgress size="7em" />
       </Paper>
   }
+
+  const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
+
+  const openPost = (_id) => history.push(`/posts/${_id}`)
 
   return (
     <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
@@ -55,11 +65,11 @@ const PostDetails = () => {
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
           <Typography variant="body1">
-            <strong>Realtime Chat - coming soon!</strong>
+            <strong>Realtime Chat - implementing!</strong>
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
           <Typography variant="body1">
-            <strong>Comments - coming soon!</strong>
+            <strong>Comments - implementing!</strong>
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
         </div>
@@ -74,6 +84,23 @@ const PostDetails = () => {
           />
         </div>
       </div>
+      {recommendedPosts.length && (
+        <div className={classes.section}>
+          <Typography gutterBottom variant="h5" >You might also like:</Typography>
+          <Divider/>
+          <div className={classes.recommendedPosts}>
+            {recommendedPosts.map(({ title, message, name, likes, selectedFile, _id }) => (
+              <div style={{ margin: '20px', cursor: "pointer" }} onClick={() => openPost(_id)} key={_id}>
+                <Typography variant="h6" gutterBottom >{title}</Typography>
+                <Typography variant="subtitle2" gutterBottom >{name}</Typography>
+                <Typography variant="subtitle2" gutterBottom >{message}</Typography>
+                <Typography variant="subtitle1" gutterBottom >Likes: {likes.length}</Typography>
+                <img src={selectedFile} alt="" width="200px" />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </Paper>
   );
 };

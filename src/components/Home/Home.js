@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Container,
   Grid,
@@ -13,7 +13,7 @@ import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import Pagination from "../Pagination";
 
-import { getPosts, getPostBySearch } from "../../actions/posts";
+import { getPostBySearch } from "../../actions/posts";
 import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import useStyles from "./styles";
