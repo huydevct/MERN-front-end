@@ -10,6 +10,7 @@ import moment from "moment";
 import { useParams, useHistory } from "react-router-dom";
 
 import useStyles from "./styles";
+import CommentSection from "./CommentSection";
 import { getPost, getPostBySearch } from '../../actions/posts';
 
 const PostDetails = () => {
@@ -25,7 +26,7 @@ const PostDetails = () => {
 
   useEffect(() => {
     if(post) {
-      dispatch(getPostBySearch({ search: 'none', tags: post?.tags.join(',') }))
+      dispatch(getPostBySearch({ search: 'none', tags: post?.tags?.join(',') }))
     }
   },[post])
 
@@ -54,7 +55,7 @@ const PostDetails = () => {
             color="textSecondary"
             component="h2"
           >
-            {post.tags.map((tag) => `#${tag} `)}
+            {post.tags?.map((tag) => `#${tag} `)}
           </Typography>
           <Typography gutterBottom variant="body1" component="p">
             {post.message}
@@ -65,12 +66,10 @@ const PostDetails = () => {
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
           <Typography variant="body1">
-            <strong>Realtime Chat - implementing!</strong>
+            <strong>Chat - implementing!</strong>
           </Typography>
           <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="body1">
-            <strong>Comments - implementing!</strong>
-          </Typography>
+          <CommentSection post={post}/>
           <Divider style={{ margin: "20px 0" }} />
         </div>
         <div className={classes.imageSection}>
